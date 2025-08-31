@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;700&family=Sarabun:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* Base Styles & Reset */
+        
         * {
             margin: 0;
             padding: 0;
@@ -21,79 +21,79 @@
             justify-content: flex-start;
             align-items: center;
             min-height: 100vh;
-            background: linear-gradient(to bottom right, #f6f8fa, #e0e6ea); /* Soft gradient background */
+            background: linear-gradient(to bottom right, #f6f8fa, #e0e6ea); 
             color: #333;
         }
 
-        /* Header Styles */
+       
         .header {
             width: 100%;
-            background: linear-gradient(to right, #6A0DAD, #8A2BE2); /* Purple gradient */
-            padding: 30px 20px; /* Adjusted padding */
+            background: linear-gradient(to right, #6A0DAD, #8A2BE2); 
+            padding: 30px 20px; 
             text-align: center;
             position: relative;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Stronger shadow */
-            min-height: 180px; /* เพิ่ม min-height เพื่อให้มีพื้นที่มากขึ้น */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
+            min-height: 180px; 
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            border-bottom-left-radius: 25px; /* Rounded corners at bottom */
+            border-bottom-left-radius: 25px; 
             border-bottom-right-radius: 25px;
         }
 
         .header h1 {
             font-family: 'Prompt', sans-serif;
-            font-size: 3.5em; /* Larger heading */
+            font-size: 3.5em; 
             color: white;
-            margin-bottom: 0px; /* *** แก้ไขตรงนี้: ลด margin ด้านล่างของ H1 เพื่อขยับ P ขึ้นมา *** */
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); /* Text shadow for depth */
+            margin-bottom: 0px; 
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); 
         }
 
         .header p {
             font-size: 1.3em;
             color: #E0BBE4;
-            margin-top: 0px; /* *** แก้ไขตรงนี้: ลด margin ด้านบนของ P เพื่อขยับขึ้นไปชิด H1 *** */
+            margin-top: 0px; 
         }
 
-       /* Home Button Styles */
+       
         .home-button {
             display: inline-flex;
             align-items: center;
             gap: 8px;
             text-decoration: none;
             background: white;
-            border: 2px solid #555; /* สีขอบเข้มขึ้นเล็กน้อย */
-            border-radius: 30px; /* ทำให้มนขึ้นอีก */
-            padding: 8px 18px; /* เพิ่ม padding เล็กน้อย */
-            font-weight: 700; /* ตัวหนาขึ้น */
+            border: 2px solid #555; 
+            border-radius: 30px; 
+            padding: 8px 18px; 
+            font-weight: 700; 
             color: #333;
             position: absolute;
-            left: 30px; /* ปรับค่านี้ตามความเหมาะสมเพื่อให้ห่างจากขอบซ้าย */
-            bottom: 30px; /* ปรับค่านี้ตามความเหมาะสมเพื่อให้ห่างจากขอบล่าง */
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1); /* เพิ่มเงา */
+            left: 30px; 
+            bottom: 30px; 
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1); 
             transition: all 0.3s ease;
         }
 
         .home-button:hover {
-            background-color: #EEE; /* สีพื้นหลังอ่อนลงเมื่อ hover */
-            transform: translateY(-2px); /* ยกขึ้นเล็กน้อยเมื่อ hover */
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15); /* เงาเข้มขึ้น */
+            background-color: #EEE; 
+            transform: translateY(-2px); 
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15); 
         }
 
         .home-button img {
-            width: 28px; /* ขนาดไอคอนใหญ่ขึ้น */
+            width: 28px; 
             height: 28px;
-            filter: invert(20%); /* ทำให้ไอคอนเข้มขึ้นเล็กน้อย */
+            filter: invert(20%); 
         }
 
-        /* Main Content Container */
+        
         .main-content {
             width: 100%;
             display: flex;
             justify-content: center;
             position: relative;
-            margin-top: -30px; /* ปรับลดค่าติดลบเพื่อให้ไม่บังข้อความ */
+            margin-top: -30px; 
             z-index: 1;
             padding: 0 20px;
             box-sizing: border-box;
@@ -101,12 +101,12 @@
 
         .container {
             background-color: white;
-            padding: 40px; /* Increased padding */
-            border-radius: 15px; /* More rounded corners */
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); /* Stronger shadow */
+            padding: 40px; 
+            border-radius: 15px; 
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); 
             text-align: center;
             width: 100%;
-            max-width: 600px; /* Wider container */
+            max-width: 600px; 
             box-sizing: border-box;
             margin: 0 auto;
         }
@@ -114,12 +114,12 @@
         h1.container-title {
             font-family: 'Prompt', sans-serif;
             margin-bottom: 25px;
-            font-size: 2em; /* Larger title */
+            font-size: 2em; 
             color: #4A4A4A;
         }
 
         .controls {
-            margin-bottom: 30px; /* More space */
+            margin-bottom: 30px; 
         }
 
         label {
@@ -133,8 +133,8 @@
         input[type="file"] {
             display: block;
             margin: 0 auto 20px;
-            padding: 15px; /* Larger padding */
-            border: 2px dashed #bbd0ec; /* Dashed border for file input */
+            padding: 15px; 
+            border: 2px dashed #bbd0ec; 
             border-radius: 10px;
             background-color: #f0f4f7;
             cursor: pointer;
@@ -153,28 +153,28 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 15px; /* Space between buttons */
+            gap: 15px; 
             margin-top: 20px;
         }
 
         button {
-            background: linear-gradient(to right, #8A2BE2, #6A0DAD); /* Purple gradient for buttons */
+            background: linear-gradient(to right, #8A2BE2, #6A0DAD); 
             color: white;
-            padding: 14px 30px; /* Larger buttons */
+            padding: 14px 30px; 
             border: none;
-            border-radius: 30px; /* More rounded */
+            border-radius: 30px; 
             cursor: pointer;
             font-size: 1.1em;
             font-weight: 600;
             transition: all 0.3s ease;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            flex-grow: 1; /* Allow buttons to grow */
-            max-width: 200px; /* Max width for buttons */
+            flex-grow: 1; 
+            max-width: 200px; 
         }
 
         button:hover {
             background: linear-gradient(to right, #6A0DAD, #5C0A9E);
-            transform: translateY(-3px); /* Lift effect */
+            transform: translateY(-3px);
             box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
         }
 
@@ -189,11 +189,11 @@
             margin-top: 30px;
             font-size: 1.1em;
             color: #333;
-            background-color: #e9f0f5; /* Lighter background for results */
+            background-color: #e9f0f5; 
             padding: 20px;
             border-radius: 10px;
-            text-align: left; /* จัดข้อความให้อยู่ตรงกลาง */
-            border: 1px solid #d0dae6; /* Soft border */
+            text-align: left; 
+            border: 1px solid #d0dae6; 
         }
 
         #predictionContainer p {
@@ -208,19 +208,18 @@
             font-size: 1em;
         }
 
-        /* New class for images displayed in prediction result */
+       
         .result-image {
-            display: block; /* Ensures it takes up full width for centering */
-            max-width: 200px; /* Fixed smaller size */
+            display: block; 
+            max-width: 200px; 
             height: auto;
-            margin: 15px auto; /* Centers the image horizontally */
+            margin: 15px auto; 
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            border: 2px solid #ccc; /* Soft border around images */
+            border: 2px solid #ccc; 
         }
 
-        /* Initial display states for image/video elements */
-        /* ทำให้ imagePreview และ cameraFeed ที่อยู่ *นอก* predictionContainer ถูกซ่อนเสมอ */
+        
         #imagePreview, #cameraFeed, #cameraCanvas {
             display: none;
         }
@@ -271,7 +270,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
 
     <script type="text/javascript">
-        const URL = "https://teachablemachine.withgoogle.com/models/IqcK4k2L3/"; // แทนที่ด้วย URL MODEL ของคุณ
+        const URL = "https://teachablemachine.withgoogle.com/models/IqcK4k2L3/"; 
         let model, maxPredictions;
         let isCameraActive = false; // สถานะของกล้อง
 
@@ -336,33 +335,30 @@
         // เริ่มต้นกล้องและจับภาพ
         async function startCamera() {
             if (isCameraActive) {
-                stopCamera(); // ถ้ากล้องทำงานอยู่ ให้หยุด (ทำงานแบบสลับเปิด/ปิด)
+                stopCamera(); 
                 useCameraButton.innerHTML = '<i class="fas fa-camera"></i> ใช้กล้อง';
                 predictionContainer.innerHTML = '<p>กรุณาอัปโหลดรูปภาพ หรือใช้กล้องเพื่อจำแนกประเภทขยะของคุณ</p>';
-                classifyButton.disabled = true; // ปิดใช้งานปุ่มจำแนกเมื่อกล้องหยุด
+                classifyButton.disabled = true; 
                 return;
             }
 
             try {
-                // ล้างรูปภาพตัวอย่างที่มีอยู่และคลาสของมัน
-                imagePreview.src = '#'; // ล้าง src ของ imagePreview
-                imageUpload.value = null; // ล้างการเลือกไฟล์
+                
+                imagePreview.src = '#'; 
+                imageUpload.value = null; 
 
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true });
                 cameraFeed.srcObject = stream;
-                // ไม่ต้องแสดง cameraFeed ตรงๆ ที่นี่ เพราะจะไปแสดงใน predictionContainer แทน
-                // cameraFeed.style.display = 'block'; 
-                // cameraFeed.classList.add('result-image'); 
-                cameraFeed.play(); // ตรวจสอบให้แน่ใจว่าวิดีโอเล่นอยู่
-                useCameraButton.innerHTML = '<i class="fas fa-stop-circle"></i> หยุดกล้อง'; // เปลี่ยนข้อความปุ่ม
+                cameraFeed.play(); 
+                useCameraButton.innerHTML = '<i class="fas fa-stop-circle"></i> หยุดกล้อง'; 
                 isCameraActive = true;
-                classifyButton.disabled = false; // เปิดใช้งานปุ่มจำแนกสำหรับสตรีมสด
+                classifyButton.disabled = false; 
                 statusMessage.textContent = 'กำลังแสดงภาพจากกล้อง...';
                 statusMessage.style.color = '#007bff';
 
-                // เริ่มทำนายต่อเนื่องจากกล้องเมื่อวิดีโอพร้อม
+               
                 cameraFeed.onloadedmetadata = () => {
-                    if (isCameraActive) { // เริ่มวนลูปเฉพาะเมื่อกล้องยังทำงานอยู่
+                    if (isCameraActive) { 
                         window.requestAnimationFrame(loop);
                     }
                 };
@@ -383,14 +379,11 @@
                 cameraFeed.srcObject.getTracks().forEach(track => track.stop());
                 cameraFeed.srcObject = null;
             }
-            // ไม่ต้องซ่อน cameraFeed โดยตรงในนี้ เพราะมันถูกซ่อนด้วย CSS อยู่แล้ว
-            // cameraFeed.style.display = 'none';
-            // cameraFeed.classList.remove('result-image');
             isCameraActive = false;
             useCameraButton.innerHTML = '<i class="fas fa-camera"></i> ใช้กล้อง';
             statusMessage.textContent = 'กล้องถูกปิดแล้ว';
             statusMessage.style.color = '#888';
-            classifyButton.disabled = true; // ปิดใช้งานปุ่มจำแนกหลังจากหยุดกล้อง
+            classifyButton.disabled = true; 
         }
 
         // ทำนายโดยใช้รูปภาพที่อัปโหลดหรือภาพจากกล้อง
@@ -402,19 +395,18 @@
             }
 
             let imageSource;
-            let sourceForDisplay = null; // สำหรับเก็บ source ของรูปภาพที่จะแสดง
-            if (isCameraActive && cameraFeed.srcObject) { // ตรวจสอบว่ากล้องทำงานอยู่และมี stream
-                // วาดเฟรมวิดีโอปัจจุบันลงบน canvas
+            let sourceForDisplay = null; 
+            if (isCameraActive && cameraFeed.srcObject) { 
                 const context = cameraCanvas.getContext('2d');
                 cameraCanvas.width = cameraFeed.videoWidth;
                 cameraCanvas.height = cameraFeed.videoHeight;
                 context.drawImage(cameraFeed, 0, 0, cameraCanvas.width, cameraCanvas.height);
-                imageSource = cameraCanvas; // ใช้ canvas เป็นอินพุตสำหรับการทำนาย
-                sourceForDisplay = cameraCanvas.toDataURL(); // ใช้ Data URL จาก canvas สำหรับแสดงผล
+                imageSource = cameraCanvas; 
+                sourceForDisplay = cameraCanvas.toDataURL(); 
                 statusMessage.textContent = 'กำลังวิเคราะห์ภาพจากกล้อง...';
             } else if (imagePreview.src && imagePreview.src !== '#') {
                 imageSource = imagePreview;
-                sourceForDisplay = imagePreview.src; // ใช้ src ของ imagePreview สำหรับแสดงผล
+                sourceForDisplay = imagePreview.src; 
                 statusMessage.textContent = 'กำลังวิเคราะห์ภาพ...';
             } else {
                 statusMessage.textContent = 'ยังไม่ได้เลือกรูปภาพหรือเปิดกล้อง';
@@ -422,9 +414,7 @@
                 return;
             }
 
-            predictionContainer.innerHTML = ''; // ล้างผลลัพธ์การทำนายก่อนหน้า
-
-            // แสดงรูปภาพที่กำลังวิเคราะห์
+            predictionContainer.innerHTML = ''; 
             if (sourceForDisplay) {
                 const imgElement = document.createElement('img');
                 imgElement.src = sourceForDisplay;
@@ -456,13 +446,13 @@
                 }
             }
 
-            // --- เพิ่มเงื่อนไขความน่าจะเป็นตรงนี้ ---
+            
             if (highestProbability < 0.70) { // หากความน่าจะเป็นน้อยกว่า 70%
                 predictionContainer.innerHTML += `
                     <p>ไม่ทราบประเภท ขออภัยครับ 😿</p>
                     <p>กรุณาลองใหม่ด้วยรูปภาพที่ชัดเจนขึ้น หรืออยู่ในสภาพแวดล้อมที่ดีขึ้น</p>
                 `;
-                statusMessage.textContent = 'ไม่สามารถระบุประเภทได้อย่างมั่นใจ';
+                statusMessage.textContent = 'ไม่สามารถระบุประเภทได้';
                 statusMessage.style.color = '#ffc107'; // สีเหลืองเตือน
             } else {
                 // แสดงผลลัพธ์
@@ -485,7 +475,7 @@
             }
         }
 
-        // Event listener สำหรับการเลือกไฟล์
+        
         imageUpload.addEventListener('change', function(event) {
             stopCamera(); // หยุดกล้องถ้ามีการเลือกไฟล์
             const file = event.target.files[0];

@@ -6,7 +6,7 @@
     <title>เพื่อนแยกขยะ</title>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;700&family=Sarabun:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
-        /* Resetting some default styles */
+        
         * {
             margin: 0;
             padding: 0;
@@ -14,17 +14,17 @@
         }
 
         body {
-            font-family: 'Sarabun', sans-serif; /* ใช้ Sarabun เป็นฟอนต์หลัก */
+            font-family: 'Sarabun', sans-serif; 
             margin: 0;
             padding: 0;
-            background-color: #F0FFF0; /* พื้นหลังสีเขียวอ่อน */
+            background-color: #F0FFF0; 
             color: #333;
-            line-height: 1.6; /* เพิ่มระยะห่างบรรทัดเพื่อให้อ่านง่ายขึ้น */
+            line-height: 1.6; 
         }
 
         /* Header Style */
         .header {
-            background: linear-gradient(to right, #2E8B57, #4CAF50); /* Green gradient */
+            background: linear-gradient(to right, #2E8B57, #4CAF50); 
             color: white;
             padding: 20px 40px;
             font-size: 3.5em;
@@ -60,12 +60,12 @@
             color: #333;
             transform: translateY(-50%) scale(1.05);
         }
-        /* Content Section */
+        
         .content {
             padding: 60px 20px;
             text-align: center;
         }
-        /* สีของแยกขยะง่ายๆด้วยตัวเราเอง */
+        
         .main-title { 
             font-family: 'Prompt', sans-serif;
             font-size: 2.8em;
@@ -74,17 +74,17 @@
             font-weight: 700;
             letter-spacing: 1.5px;
         }
-     /* เว็บไซต์ที่จะช่วยให้คุณเรียนรู้วิธีการแยกขยะอย่างถูกต้อง เพื่อโลกที่สะอาดและยั่งยืนเลือกเนื้อหาที่คุณสนใจได้เลย! */
+     
         .sub-title {
             font-size: 1.3em;
             color: #555;
-            margin-bottom: 20px; /* ลด margin-bottom จาก 50px เป็น 20px */
+            margin-bottom: 20px; 
             max-width: 800px;
             margin-left: auto;
             margin-right: auto;
         }
-        .sub-title:last-of-type { /* สำหรับ "เลือกเนื้อหาที่คุณสนใจได้เลย!" */
-            margin-bottom: 50px; /* เพิ่ม margin-bottom กลับมาเป็น 50px */
+        .sub-title:last-of-type { 
+            margin-bottom: 50px; 
         }
 
 
@@ -139,7 +139,7 @@
             flex-grow: 1;
         }
 
-        /* รวม selector สำหรับปุ่มทั้งหมดไว้ด้วยกัน */
+        
         .card a.button-blue,
         .card a.button-orange,
         .card a.button-purple,
@@ -230,7 +230,7 @@
         }
 
 
-        /* Footer Section */
+        
         .footer {
             background-color: #F0FFF0;
             padding: 50px 20px;
@@ -239,7 +239,7 @@
             color: #ffffff;
         }
 
-        .footer > p { /* Target direct child <p> of footer */
+        .footer > p { 
             font-size: 3em;
             margin-bottom: 25px;
             font-family: 'Prompt', sans-serif;
@@ -254,36 +254,36 @@
             box-shadow: 0 10px 30px rgba(32, 103, 4, 0.581);
             margin: 30px auto 0 auto;
             width: 100%;
-            max-width: 900px; /* เพิ่ม max-width เพื่อรองรับรูปภาพด้านข้าง */
-            display: flex; /* ใช้ flexbox */
-            align-items: center; /* จัดให้เนื้อหาอยู่กึ่งกลางแนวตั้ง */
-            gap: 30px; /* ระยะห่างระหว่างรูปภาพกับข้อความ */
-            text-align: left; /* จัดข้อความภายในกล่องให้อยู่ซ้าย */
+            max-width: 900px; 
+            display: flex; 
+            align-items: center; 
+            gap: 30px; 
+            text-align: left; 
         }
 
         .footer .box-container .image-wrapper {
-            flex-shrink: 0; /* ป้องกันไม่ให้รูปภาพหดตัว */
-            width: 200px; /* กำหนดความกว้างของพื้นที่รูปภาพ */
+            flex-shrink: 0; 
+            width: 200px; 
             height: auto;
         }
 
         .footer .box-container .image-wrapper img {
-            max-width: 100%; /* ทำให้รูปภาพย่อขนาดตาม container */
+            max-width: 100%; 
             height: auto;
-            display: block; /* ลบช่องว่างด้านล่างรูปภาพ */
-            border-radius: 10px; /* ทำขอบมนให้รูปภาพ */
-            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.1); /* เพิ่มเงาให้รูปภาพ */
+            display: block; 
+            border-radius: 10px; 
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.1); 
         }
 
         .footer .box-container .content-text {
-            flex-grow: 1; /* ให้ text content ขยายเต็มพื้นที่ที่เหลือ */
+            flex-grow: 1; 
         }
 
         .footer .box-container .title {
             font-family: 'Prompt', sans-serif;
             font-size: 1.8em;
             color: #2ECC71;
-            margin-bottom: 15px; /* ลด margin-bottom จาก 20px เป็น 15px */
+            margin-bottom: 15px; 
             font-weight: 700;
         }
 
