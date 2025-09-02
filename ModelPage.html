@@ -333,45 +333,64 @@
         }
 
         // เริ่มต้นกล้องและจับภาพ
-        async function startCamera() {
+async function startCamera() {
+    if (isCameraActive) {
+        stopCamera();
+        useCameraButton.innerHTML = '<i class="fas fa-camera"></i> ใช้กล้อง';
+        predictionContainer.innerHTML = '<p>กรุณาอัปโหลดรูปภาพ หรือใช้กล้องเพื่อจำแนกประเภทขยะของคุณ</p>';
+        classifyButton.disabled = true;
+        return;
+    }
+
+    try {
+        imagePreview.src = '#';
+        imageUpload.value = null;
+
+        // ร้องขอการเข้าถึงกล้องหลังด้วย facingMode: "environment"
+        const constraints = {
+            video: {
+                facingMode: 'environment' // 'environment' สำหรับกล้องหลัง, 'user' สำหรับกล้องหน้า
+            }
+        };
+
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        cameraFeed.srcObject = stream;
+        cameraFeed.play();
+        useCameraButton.innerHTML = '<i class="fas fa-stop-circle"></i> หยุดกล้อง';
+        isCameraActive = true;
+        classifyButton.disabled = false;
+        statusMessage.textContent = 'กำลังแสดงภาพจากกล้อง...';
+        statusMessage.style.color = '#007bff';
+
+        cameraFeed.onloadedmetadata = () => {
             if (isCameraActive) {
-                stopCamera(); 
-                useCameraButton.innerHTML = '<i class="fas fa-camera"></i> ใช้กล้อง';
-                // predictionContainer.innerHTML = '<p>กรุณาอัปโหลดรูปภาพ หรือใช้กล้องเพื่อจำแนกประเภทขยะของคุณ</p>';
-                classifyButton.disabled = true; 
-                return;
+                window.requestAnimationFrame(loop);
             }
+        };
 
-            try {
-                
-                imagePreview.src = '#'; 
-                imageUpload.value = null; 
-
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-                cameraFeed.srcObject = stream;
-                cameraFeed.play(); 
-                useCameraButton.innerHTML = '<i class="fas fa-stop-circle"></i> หยุดกล้อง'; 
-                isCameraActive = true;
-                classifyButton.disabled = false; 
-                statusMessage.textContent = 'กำลังแสดงภาพจากกล้อง...';
-                statusMessage.style.color = '#007bff';
-
-               
-                cameraFeed.onloadedmetadata = () => {
-                    if (isCameraActive) { 
-                        window.requestAnimationFrame(loop);
-                    }
-                };
-
-            } catch (error) {
-                statusMessage.textContent = 'ไม่สามารถเข้าถึงกล้องได้ โปรดอนุญาตการเข้าถึง';
-                statusMessage.style.color = '#dc3545';
-                console.error("เกิดข้อผิดพลาดในการเข้าถึงกล้อง:", error);
-                useCameraButton.innerHTML = '<i class="fas fa-camera"></i> ใช้กล้อง';
-                isCameraActive = false;
-                classifyButton.disabled = true;
-            }
+    } catch (error) {
+        // หากไม่สามารถเข้าถึงกล้องหลังได้ ให้ลองใช้กล้องหน้าแทน
+        console.error("ไม่สามารถเข้าถึงกล้องหลังได้, กำลังลองใช้กล้องหน้า:", error);
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+            cameraFeed.srcObject = stream;
+            cameraFeed.play();
+            useCameraButton.innerHTML = '<i class="fas fa-stop-circle"></i> หยุดกล้อง';
+            isCameraActive = true;
+            classifyButton.disabled = false;
+            statusMessage.textContent = 'กำลังแสดงภาพจากกล้อง... (ใช้กล้องหน้า)';
+            statusMessage.style.color = '#007bff';
+        } catch (frontError) {
+            // หากไม่สามารถเข้าถึงกล้องหน้าได้ด้วย
+            statusMessage.textContent = 'ไม่สามารถเข้าถึงกล้องได้ โปรดอนุญาตการเข้าถึง';
+            statusMessage.style.color = '#dc3545';
+            console.error("เกิดข้อผิดพลาดในการเข้าถึงกล้อง:", frontError);
+            useCameraButton.innerHTML = '<i class="fas fa-camera"></i> ใช้กล้อง';
+            isCameraActive = false;
+            classifyButton.disabled = true;
         }
+    }
+}
 
         // หยุดกล้อง
         function stopCamera() {
