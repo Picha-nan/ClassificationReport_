@@ -249,14 +249,14 @@
                     <button id="useCameraButton">
                         <i class="fas fa-camera"></i> ใช้กล้อง
                     </button>
-                    <!-- <button id="classifyButton" disabled>
+                    <button id="classifyButton" disabled>
                         <i class="fas fa-search"></i> จำแนกประเภท
-                    </button> -->
+                    </button>
                 </div>
             </div>
 
             <div id="predictionContainer">
-                <!-- <p>กรุณาอัปโหลดรูปภาพ หรือใช้กล้องเพื่อจำแนกประเภทขยะของคุณ</p> -->
+                <p>กรุณาอัปโหลดรูปภาพ หรือใช้กล้องเพื่อจำแนกประเภทขยะของคุณ</p>
             </div>
             <div id="statusMessage" class="loading-message"></div>
 
@@ -324,7 +324,7 @@
                 statusMessage.style.color = '#28a745'; // สีเขียวสำหรับสำเร็จ
                 classifyButton.disabled = false; // เปิดใช้งานปุ่มจำแนก
                 useCameraButton.disabled = false; // เปิดใช้งานปุ่มกล้อง
-                predictionContainer.innerHTML = '<p>กรุณาอัปโหลดรูปภาพ หรือใช้กล้องเพื่อจำแนกประเภทขยะของคุณ</p>'; // รีเซ็ตข้อความเริ่มต้น
+                // predictionContainer.innerHTML = '<p>กรุณาอัปโหลดรูปภาพ หรือใช้กล้องเพื่อจำแนกประเภทขยะของคุณ</p>'; // รีเซ็ตข้อความเริ่มต้น
             } catch (error) {
                 statusMessage.textContent = 'เกิดข้อผิดพลาดในการโหลดโมเดล โปรดตรวจสอบ URL และการเชื่อมต่ออินเทอร์เน็ต';
                 statusMessage.style.color = '#dc3545'; // สีแดงสำหรับข้อผิดพลาด
@@ -337,7 +337,7 @@
             if (isCameraActive) {
                 stopCamera(); 
                 useCameraButton.innerHTML = '<i class="fas fa-camera"></i> ใช้กล้อง';
-                predictionContainer.innerHTML = '<p>กรุณาอัปโหลดรูปภาพ หรือใช้กล้องเพื่อจำแนกประเภทขยะของคุณ</p>';
+                // predictionContainer.innerHTML = '<p>กรุณาอัปโหลดรูปภาพ หรือใช้กล้องเพื่อจำแนกประเภทขยะของคุณ</p>';
                 classifyButton.disabled = true; 
                 return;
             }
@@ -350,7 +350,7 @@
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true });
                 cameraFeed.srcObject = stream;
                 cameraFeed.play(); 
-                useCameraButton.innerHTML = '<i class="fas fa-stop-circle"></i> จำแนก'; 
+                useCameraButton.innerHTML = '<i class="fas fa-search"></i> หยุดกล้อง'; 
                 isCameraActive = true;
                 classifyButton.disabled = false; 
                 statusMessage.textContent = 'กำลังแสดงภาพจากกล้อง...';
@@ -492,7 +492,7 @@
                 reader.readAsDataURL(file);
             } else {
                 imagePreview.src = '#';
-                predictionContainer.innerHTML = '<p>กรุณาอัปโหลดรูปภาพ หรือใช้กล้องเพื่อจำแนกประเภทขยะของคุณ</p>';
+                // predictionContainer.innerHTML = '<p>กรุณาอัปโหลดรูปภาพ หรือใช้กล้องเพื่อจำแนกประเภทขยะของคุณ</p>';
                 classifyButton.disabled = true;
             }
         });
