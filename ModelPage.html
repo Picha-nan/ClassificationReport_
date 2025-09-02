@@ -245,7 +245,7 @@
                 <label for="imageUpload">เลือกไฟล์รูปภาพ หรือใช้กล้อง:</label>
                 <input type="file" id="imageUpload" accept="image/*">
 
-                <!-- <div class="button-group">
+                <div class="button-group">
                     <button id="useCameraButton">
                         <i class="fas fa-camera"></i> ใช้กล้อง
                     </button>
@@ -253,7 +253,7 @@
                         <i class="fas fa-search"></i> จำแนกประเภท
                     </button>
                 </div>
-            </div> -->
+            </div>
 
             <div id="predictionContainer">
                 <p>กรุณาอัปโหลดรูปภาพ หรือใช้กล้องเพื่อจำแนกประเภทขยะของคุณ</p>
@@ -350,7 +350,7 @@
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true });
                 cameraFeed.srcObject = stream;
                 cameraFeed.play(); 
-                useCameraButton.innerHTML = '<i class="fas fa-stop-circle"></i> หยุดกล้อง'; 
+                useCameraButton.innerHTML = '<i class="fas fa-stop-circle"></i> จำแนก'; 
                 isCameraActive = true;
                 classifyButton.disabled = false; 
                 statusMessage.textContent = 'กำลังแสดงภาพจากกล้อง...';
