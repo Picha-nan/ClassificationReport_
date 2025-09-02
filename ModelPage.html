@@ -350,7 +350,7 @@
                 const stream = await navigator.mediaDevices.getUserMedia({ video: true });
                 cameraFeed.srcObject = stream;
                 cameraFeed.play(); 
-                useCameraButton.innerHTML = '<i class="fas fa-search"></i> หยุดกล้อง'; 
+                useCameraButton.innerHTML = '<i class="fas fa-stop-circle"></i> หยุดกล้อง'; 
                 isCameraActive = true;
                 classifyButton.disabled = false; 
                 statusMessage.textContent = 'กำลังแสดงภาพจากกล้อง...';
