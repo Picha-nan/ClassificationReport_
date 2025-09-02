@@ -337,7 +337,7 @@ async function startCamera() {
     if (isCameraActive) {
         stopCamera();
         useCameraButton.innerHTML = '<i class="fas fa-camera"></i> ใช้กล้อง';
-        predictionContainer.innerHTML = '<p>กรุณาอัปโหลดรูปภาพ หรือใช้กล้องเพื่อจำแนกประเภทขยะของคุณ</p>';
+        // predictionContainer.innerHTML = '<p>กรุณาอัปโหลดรูปภาพ หรือใช้กล้องเพื่อจำแนกประเภทขยะของคุณ</p>';
         classifyButton.disabled = true;
         return;
     }
