@@ -1,530 +1,60 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>จำแนกขยะกันเถอะ - Waste Classifier</title>
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;700&family=Sarabun:wght@300;400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<div>Teachable Machine Image Model</div>
+<button type="button" onclick="init()">Start</button>
+<div id="webcam-container"></div>
+<div id="label-container"></div>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+<script type="text/javascript">
+    // More API functions here:
+    // https://github.com/googlecreativelab/teachablemachine-community/tree/master/libraries/image
+    
 
-        body {
-            font-family: 'Sarabun', sans-serif;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: center;
-            min-height: 100vh;
-            background: linear-gradient(to bottom right, #f6f8fa, #e0e6ea); 
-            color: #333;
-        }
+    // the link to your model provided by Teachable Machine export panel
+    const URL = "https://teachablemachine.withgoogle.com/models/IqcK4k2L3/";
 
-       
-        .header {
-            width: 100%;
-            background: linear-gradient(to right, #6A0DAD, #8A2BE2); 
-            padding: 30px 20px; 
-            text-align: center;
-            position: relative;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
-            min-height: 180px; 
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            border-bottom-left-radius: 25px; 
-            border-bottom-right-radius: 25px;
-        }
+    let model, webcam, labelContainer, maxPredictions;
 
-        .header h1 {
-            font-family: 'Prompt', sans-serif;
-            font-size: 3.5em; 
-            color: white;
-            margin-bottom: 0px; 
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3); 
-        }
+    // Load the image model and setup the webcam
+    async function init() {
+        const modelURL = URL + "model.json";
+        const metadataURL = URL + "metadata.json";
 
-        .header p {
-            font-size: 1.3em;
-            color: #E0BBE4;
-            margin-top: 0px; 
-        }
+        // load the model and metadata
+        // Refer to tmImage.loadFromFiles() in the API to support files from a file picker
+        // or files from your local hard drive
+        // Note: the pose library adds "tmImage" object to your window (window.tmImage)
+        model = await tmImage.load(modelURL, metadataURL);
+        maxPredictions = model.getTotalClasses();
 
-       
-        .home-button {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            text-decoration: none;
-            background: white;
-            border: 2px solid #555; 
-            border-radius: 30px; 
-            padding: 8px 18px; 
-            font-weight: 700; 
-            color: #333;
-            position: absolute;
-            left: 30px; 
-            bottom: 30px; 
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1); 
-            transition: all 0.3s ease;
-        }
+        // Convenience function to setup a webcam
+        const flip = true; // whether to flip the webcam
+        webcam = new tmImage.Webcam(200, 200, flip); // width, height, flip
+        await webcam.setup(); // request access to the webcam
+        await webcam.play();
+        window.requestAnimationFrame(loop);
 
-        .home-button:hover {
-            background-color: #EEE; 
-            transform: translateY(-2px); 
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15); 
-        }
-
-        .home-button img {
-            width: 28px; 
-            height: 28px;
-            filter: invert(20%); 
-        }
-
-        
-        .main-content {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            position: relative;
-            margin-top: -30px; 
-            z-index: 1;
-            padding: 0 20px;
-            box-sizing: border-box;
-        }
-
-        .container {
-            background-color: white;
-            padding: 40px; 
-            border-radius: 15px; 
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); 
-            text-align: center;
-            width: 100%;
-            max-width: 600px; 
-            box-sizing: border-box;
-            margin: 0 auto;
-        }
-
-        h1.container-title {
-            font-family: 'Prompt', sans-serif;
-            margin-bottom: 25px;
-            font-size: 2em; 
-            color: #4A4A4A;
-        }
-
-        .controls {
-            margin-bottom: 30px; 
-        }
-
-        label {
-            display: block;
-            margin-bottom: 10px;
-            font-size: 1.1em;
-            color: #555;
-            font-weight: 500;
-        }
-
-        input[type="file"] {
-            display: block;
-            margin: 0 auto 20px;
-            padding: 15px; 
-            border: 2px dashed #bbd0ec; 
-            border-radius: 10px;
-            background-color: #f0f4f7;
-            cursor: pointer;
-            width: 100%;
-            max-width: 400px;
-            font-size: 1em;
-            box-sizing: border-box;
-            transition: border-color 0.3s ease;
-        }
-
-        input[type="file"]:hover {
-            border-color: #8faacd;
-        }
-
-        .button-group {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 15px; 
-            margin-top: 20px;
-        }
-
-        button {
-            background: linear-gradient(to right, #8A2BE2, #6A0DAD); 
-            color: white;
-            padding: 14px 30px; 
-            border: none;
-            border-radius: 30px; 
-            cursor: pointer;
-            font-size: 1.1em;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            flex-grow: 1; 
-            max-width: 200px; 
-        }
-
-        button:hover {
-            background: linear-gradient(to right, #6A0DAD, #5C0A9E);
-            transform: translateY(-3px);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-        }
-
-        button:disabled {
-            background: #cccccc;
-            cursor: not-allowed;
-            box-shadow: none;
-            transform: none;
-        }
-
-        #predictionContainer {
-            margin-top: 30px;
-            font-size: 1.1em;
-            color: #333;
-            background-color: #e9f0f5; 
-            padding: 20px;
-            border-radius: 10px;
-            text-align: left; 
-            border: 1px solid #d0dae6; 
-        }
-
-        #predictionContainer p {
-            margin-bottom: 8px;
-            line-height: 1.8;
-        }
-
-        .loading-message {
-            color: #888;
-            font-style: italic;
-            margin-top: 15px;
-            font-size: 1em;
-        }
-
-       
-        .result-image {
-            display: block; 
-            max-width: 200px; 
-            height: auto;
-            margin: 15px auto; 
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            border: 2px solid #ccc; 
-        }
-
-        
-        #imagePreview, #cameraFeed, #cameraCanvas {
-            display: none;
-        }
-
-       
-    </style>
-</head>
-<body>
-
-    <div class="header">
-        <a href="index.html" class="home-button">
-            <img src="https://img.icons8.com/ios-filled/50/000000/home.png" alt="home">
-            กลับสู่หน้าHome
-        </a>
-        <h1>จำแนกขยะกันเถอะ!</b></h1>
-        <p>ฉันจะช่วยแนะนำวิธีการทิ้งให้คุณเอง</p>
-    </div>
-
-    <div class="main-content">
-        <div class="container">
-            <h1 class="container-title">จำแนกประเภทขยะของคุณ</h1>
-            <div class="controls">
-                <label for="imageUpload">เลือกไฟล์รูปภาพ หรือใช้กล้อง:</label>
-                <input type="file" id="imageUpload" accept="image/*">
-
-                <div class="button-group">
-                    <button id="useCameraButton">
-                        <i class="fas fa-camera"></i> ใช้กล้อง
-                    </button>
-                    <button id="classifyButton" disabled>
-                        <i class="fas fa-search"></i> จำแนกประเภท
-                    </button>
-                </div>
-            </div>
-
-            <div id="predictionContainer">
-                <p>กรุณาอัปโหลดรูปภาพ หรือใช้กล้องเพื่อจำแนกประเภทขยะของคุณ</p>
-            </div>
-            <div id="statusMessage" class="loading-message"></div>
-
-            <img id="imagePreview" src="#" alt="Image Preview" style="display: none;">
-            <video id="cameraFeed" autoplay style="display: none;"></video>
-            <canvas id="cameraCanvas" style="display: none;"></canvas>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
-
-    <script type="text/javascript">
-        const URL = "https://teachablemachine.withgoogle.com/models/IqcK4k2L3/"; 
-        let model, maxPredictions;
-        let isCameraActive = false; // สถานะของกล้อง
-
-        const imageUpload = document.getElementById('imageUpload');
-        const imagePreview = document.getElementById('imagePreview');
-        const classifyButton = document.getElementById('classifyButton');
-        const useCameraButton = document.getElementById('useCameraButton');
-        const cameraFeed = document.getElementById('cameraFeed');
-        const cameraCanvas = document.getElementById('cameraCanvas');
-        const predictionContainer = document.getElementById('predictionContainer');
-        const statusMessage = document.getElementById('statusMessage');
-
-        // ข้อมูลการทิ้งขยะสำหรับ 20 ประเภท
-        const wasteDisposalInfo = {
-            'atk': { bin: 'ขยะติดเชื้อ', instruction: '1.ขยะไม่ปนเปื้อน(เช่น กล่องบรรจุภัณฑ์ เอกสาร) ทิ้งลงถังขยะทั่วไปที่มีฝาปิด <br> 2.ขยะปนเปื้อน(เช่น ไม้ Swab แผ่นทดสอบ หลอดน้ำยา) จัดเป็นขยะเสี่ยงติดเชื้อต้องแยกทิ้งต่างหาก' },
-            'syringe': { bin: 'ขยะติดเชื้อ', instruction: 'ควรสวมปลอกเข็มและทิ้งลงภาชนะที่ไม่สามารถแทงทะลุได้ เช่น กล่อง ถัง หรือโลหะ และนำภาชนะนั้นไปทิ้งยังสถานพยาบาล' },
-            'clotes': { bin: 'ขยะทั่วไป/ขยะรีไซเคิล', instruction: '1.แยกเสื้อผ้าที่ยังใช้ได้: หากเสื้อผ้ายังดีอยู่สามารถบริจาคหรือ<br>ส่งไปรีไซเคิล <br>2.ทิ้งเสื้อผ้าที่ใช้ไม่ได้:ใส่ในถุงขยะและทิ้งในถังขยะทั่วไป <br>3.ส่งไปรีไซเคิล:หากมีจุดรับเสื้อผ้าเก่าหรือองค์กรที่รับบริจาคเสื้อผ้าเก่า สามารถส่งไปได้ หรือทิ้งลงถังขยะทั่วไป ' },
-            'shoes': { bin: 'ขยะทั่วไป/ขยะรีไซเคิล', instruction: 'ร้านรับซื้อขยะรีไซเคิล ร้านรับซื้อของเก่า ถ้ายังสามารถนำมาใช้ได้สามารถนำไปที่จุดรับบริจาคและองค์กรต่างๆที่รับวัสดุเหลือใช้ หรือทิ้งลงถังขยะทั่วไป' },
-            'toothbrush': { bin: 'ขยะทั่วไป/ขยะรีไซเคิล', instruction: 'กรณีทิ้งถังขยะรีไซเคิล แปรงที่ด้ามแปรงไม่มีลวดลายหรือมียางกันลื่น สามารถตัดเฉพาะหัวขนแปรงทิ้ง ส่วนด้ามเป็นพลาสติก รีไซเคิลได้ <br>กรณีที่ต้องการทิ้งที่ถังขยะทั่วไป สามารถล้างและให้แห้งก่อนทิ้งลงถังขยะ' },
-            'medicine': { bin: 'ขยะอันตราย', instruction: 'ทิ้งถังขยะอันตราย 1.ดูคำแนะนำการทิ้งยาที่เอกสารกำกับยา <br>2.ขูดฉลากที่มีชื่อ/ข้อมูลส่วนตัวบนขวดยาออกก่อนทิ้งทุกครั้ง <br>3.นำยาที่หมดอายุใส่ภาชนะ/ถุงซิปล็อคที่ปิดแน่นสนิท <br>4.นำยาไปทิ้งในถังขยะแยกประเภทหรือฝากทิ้งที่โรงพยาบาลใกล้บ้าน' },
-            'plastic': { bin: 'ขยะรีไซเคิล', instruction: 'ล้างทำความสะอาดและรวบรวมเพื่อลดพื้นที่ ' },
-            'miniplastic': { bin: 'ขยะทั่วไป', instruction: 'เทสิ่งที่อยู่ในซองให้หมดและทำการทิ้ง หรือรวมใส่ถุงพลาสติกก่อนทิ้ง' },
-            'glass': { bin: 'ขยะรีไซเคิล', instruction: '(ถ้าแก้วแตก) ห่อให้มิดชิดก่อนนำไปทิ้ง รวบรวมใส่กระป้องที่มีฝาปิดหรือห่อด้วยกระดาษหนังสือพิมพ์หลายๆชั้นแล้วใส่ถุงอีกที รัดให้แน่นเขียนว่าเป็นเศษแก้วแตก <br>ถ้าเป็นขวดหรือแก้วในสภาพดี สามารถรวบรวมและไปขายที่ร้านของเก่าเพื่อเพิ่มรายได้ได้' },
-            'bio': { bin: 'ขยะเปียก', instruction: 'ทิ้งรวมกับเศษอาหาร <br>คำแนะนำ: โปรดหลีกเลี่ยงการทิ้งขยะอินทรีย์ในถุงพลาสติกเพื่อการย่อยสลายที่ดี' },
-            'box_fruit': { bin: 'ขยะรีไซเคิล', instruction: 'ทำการล้างให้สะอาด ตากให้แห้งและทิ้งลงถังขยะรีไซเคิล <br>หรือทำการรวบรวมเพื่อนำไปขายที่ร้านของเก่าเพื่อเพิ่มรายได้ได้ ' },
-            'battery': { bin: 'ขยะอันตราย/ขยะอิเล็กทรอนิกส์', instruction: 'ทิ้งจุดรับแบตเตอรี่ หรือถังขยะอันตราย สำหรับแบตเตอรี่โทรศัพท์ หูฟังและอื่นๆที่เกี่ยวกับอิเล็กทรอนิกส์สามารถนำไปทิ้งจุดรับขยะอิเล็กทรอนิกส์ได้ ' },
-            'bottle': { bin: 'ขยะรีไซเคิล', instruction: 'ล้างสะอาด ทิ้งถังขยะรีไซเคิล หรือทำการรวบรวมเพื่อนำไปขายที่ร้านของเก่าเพื่อเพิ่มรายได้ได้' },
-            'cardboard': { bin: 'ขยะรีไซเคิล', instruction: 'พับให้แบน ทิ้งถังขยะรีไซเคิล หรือทำการรวบรวมเพื่อนำไปขายที่ร้านของเก่าเพื่อเพิ่มรายได้ได้' },
-            'diaper': { bin: 'ขยะทั่วไป/เฉพาะ', instruction: 'ทิ้งในถังขยะที่รองรับผ้าอนามัย/ผ้าอ้อมโดยเฉพาะ หรือถังขยะทั่วไป ผ้าอนามัยหรือผ้าอ้อม ควรทำการห่อให้มิดชิดก่อนทิ้งลงถังขยะ' },
-            'light': { bin: 'ขยะอันตราย', instruction: 'ทิ้งจุดรับขยะอันตราย <br>1.ห่อหลอดไฟด้วยปลอกกระดาษหรือกระดาษหนังสือพิมพ์หลายชั้น <br>2.หากเป็นหลอดกลมหรือหลอดตะเกียบ ให้ใส่ถุงหรือกล่องเพิ่ม <br>3.ติดป้ายว่า “หลอดไฟใช้แล้ว” ให้เจ้าหน้าที่เห็นชัดเจนก่อนทิ้งลงถังขยะอันตราย  <br>!แต่สำหรับหลอดแอลอีดี สามารถทิ้งถังขยะรีไซเคิลได้เลย' },
-            'paper': { bin: 'ขยะรีไซเคิล', instruction: 'แยกตามประเภท (กระดาษขาว, กล่อง, หนังสือพิมพ์) ทิ้งถังขยะรีไซเคิล หรือทำการรวบรวมเพื่อนำไปขายที่ร้านของเก่าเพื่อเพิ่มรายได้ได้' },
-            'metal': { bin: 'ขยะรีไซเคิล', instruction: 'ทำความสะอาด ทิ้งถังขยะรีไซเคิล หรือทำการรวบรวมเพื่อนำไปขายที่ร้านของเก่าเพื่อเพิ่มรายได้ได้' },
-            'mask': { bin: 'ขยะติดเชื้อ', instruction: 'พับหน้ากาก ให้ส่วนที่สัมผัสใบหน้าดูด้านใน ม้วนสายรัดแล้วพันรอบหน้ากาก ใส่ถุงพลาสติก มัดปากถุงให้แน่นถังขยะที่มีฝาปิดทิ้งถังขยะติดเชื้อ' },
-            'ewaste': { bin: 'ขยะอิเล็กทรอนิกส์', instruction: 'ทิ้งจุดรับขยะอิเล็กทรอนิกส์' },
-            'unrecognized': { bin: 'ไม่ระบุประเภท', instruction: 'ไม่สามารถระบุประเภทได้' } // สำหรับกรณีที่ไม่รู้จัก
-        };
-
-        // เริ่มต้นโหลดโมเดล
-        async function init() {
-            try {
-                statusMessage.textContent = 'กำลังโหลดโมเดล...';
-                classifyButton.disabled = true; // ปิดใช้งานปุ่มจนกว่าโมเดลจะโหลดเสร็จ
-                useCameraButton.disabled = true; // ปิดใช้งานปุ่มจนกว่าโมเดลจะโหลดเสร็จ
-
-                const modelURL = URL + "model.json";
-                const metadataURL = URL + "metadata.json";
-                model = await tmImage.load(modelURL, metadataURL);
-                maxPredictions = model.getTotalClasses();
-
-                statusMessage.textContent = 'โหลดโมเดลสำเร็จแล้ว เลือกรูปภาพหรือใช้กล้อง';
-                statusMessage.style.color = '#28a745'; // สีเขียวสำหรับสำเร็จ
-                classifyButton.disabled = false; // เปิดใช้งานปุ่มจำแนก
-                useCameraButton.disabled = false; // เปิดใช้งานปุ่มกล้อง
-                // predictionContainer.innerHTML = '<p>กรุณาอัปโหลดรูปภาพ หรือใช้กล้องเพื่อจำแนกประเภทขยะของคุณ</p>'; // รีเซ็ตข้อความเริ่มต้น
-            } catch (error) {
-                statusMessage.textContent = 'เกิดข้อผิดพลาดในการโหลดโมเดล โปรดตรวจสอบ URL และการเชื่อมต่ออินเทอร์เน็ต';
-                statusMessage.style.color = '#dc3545'; // สีแดงสำหรับข้อผิดพลาด
-                console.error("เกิดข้อผิดพลาดในการโหลดโมเดล Teachable Machine:", error);
-            }
-        }
-
-        // เริ่มต้นกล้องและจับภาพ
-async function startCamera() {
-    if (isCameraActive) {
-        stopCamera();
-        useCameraButton.innerHTML = '<i class="fas fa-camera"></i> ใช้กล้อง';
-        // predictionContainer.innerHTML = '<p>กรุณาอัปโหลดรูปภาพ หรือใช้กล้องเพื่อจำแนกประเภทขยะของคุณ</p>';
-        classifyButton.disabled = true;
-        return;
-    }
-
-    try {
-        imagePreview.src = '#';
-        imageUpload.value = null;
-
-        // ร้องขอการเข้าถึงกล้องหลังด้วย facingMode: "environment"
-        const constraints = {
-            video: {
-                facingMode: 'environment' // 'environment' สำหรับกล้องหลัง, 'user' สำหรับกล้องหน้า
-            }
-        };
-
-        const stream = await navigator.mediaDevices.getUserMedia(constraints);
-        cameraFeed.srcObject = stream;
-        cameraFeed.play();
-        useCameraButton.innerHTML = '<i class="fas fa-stop-circle"></i> หยุดกล้อง';
-        isCameraActive = true;
-        classifyButton.disabled = false;
-        statusMessage.textContent = 'กำลังแสดงภาพจากกล้อง...';
-        statusMessage.style.color = '#007bff';
-
-        cameraFeed.onloadedmetadata = () => {
-            if (isCameraActive) {
-                window.requestAnimationFrame(loop);
-            }
-        };
-
-    } catch (error) {
-        // หากไม่สามารถเข้าถึงกล้องหลังได้ ให้ลองใช้กล้องหน้าแทน
-        console.error("ไม่สามารถเข้าถึงกล้องหลังได้, กำลังลองใช้กล้องหน้า:", error);
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-            cameraFeed.srcObject = stream;
-            cameraFeed.play();
-            useCameraButton.innerHTML = '<i class="fas fa-stop-circle"></i> หยุดกล้อง';
-            isCameraActive = true;
-            classifyButton.disabled = false;
-            statusMessage.textContent = 'กำลังแสดงภาพจากกล้อง... (ใช้กล้องหน้า)';
-            statusMessage.style.color = '#007bff';
-        } catch (frontError) {
-            // หากไม่สามารถเข้าถึงกล้องหน้าได้ด้วย
-            statusMessage.textContent = 'ไม่สามารถเข้าถึงกล้องได้ โปรดอนุญาตการเข้าถึง';
-            statusMessage.style.color = '#dc3545';
-            console.error("เกิดข้อผิดพลาดในการเข้าถึงกล้อง:", frontError);
-            useCameraButton.innerHTML = '<i class="fas fa-camera"></i> ใช้กล้อง';
-            isCameraActive = false;
-            classifyButton.disabled = true;
+        // append elements to the DOM
+        document.getElementById("webcam-container").appendChild(webcam.canvas);
+        labelContainer = document.getElementById("label-container");
+        for (let i = 0; i < maxPredictions; i++) { // and class labels
+            labelContainer.appendChild(document.createElement("div"));
         }
     }
-}
 
-        // หยุดกล้อง
-        function stopCamera() {
-            if (cameraFeed.srcObject) {
-                cameraFeed.srcObject.getTracks().forEach(track => track.stop());
-                cameraFeed.srcObject = null;
-            }
-            isCameraActive = false;
-            useCameraButton.innerHTML = '<i class="fas fa-camera"></i> ใช้กล้อง';
-            statusMessage.textContent = 'กล้องถูกปิดแล้ว';
-            statusMessage.style.color = '#888';
-            classifyButton.disabled = true; 
+    async function loop() {
+        webcam.update(); // update the webcam frame
+        await predict();
+        window.requestAnimationFrame(loop);
+    }
+
+    // run the webcam image through the image model
+    async function predict() {
+        // predict can take in an image, video or canvas html element
+        const prediction = await model.predict(webcam.canvas);
+        for (let i = 0; i < maxPredictions; i++) {
+            const classPrediction =
+                prediction[i].className + ": " + prediction[i].probability.toFixed(2);
+            labelContainer.childNodes[i].innerHTML = classPrediction;
         }
-
-        // ทำนายโดยใช้รูปภาพที่อัปโหลดหรือภาพจากกล้อง
-        async function predict() {
-            if (!model) {
-                statusMessage.textContent = 'โมเดลยังไม่ถูกโหลด โปรดรอสักครู่หรือรีเฟรชหน้า';
-                statusMessage.style.color = '#dc3545';
-                return;
-            }
-
-            let imageSource;
-            let sourceForDisplay = null; 
-            if (isCameraActive && cameraFeed.srcObject) { 
-                const context = cameraCanvas.getContext('2d');
-                cameraCanvas.width = cameraFeed.videoWidth;
-                cameraCanvas.height = cameraFeed.videoHeight;
-                context.drawImage(cameraFeed, 0, 0, cameraCanvas.width, cameraCanvas.height);
-                imageSource = cameraCanvas; 
-                sourceForDisplay = cameraCanvas.toDataURL(); 
-                statusMessage.textContent = 'กำลังวิเคราะห์ภาพจากกล้อง...';
-            } else if (imagePreview.src && imagePreview.src !== '#') {
-                imageSource = imagePreview;
-                sourceForDisplay = imagePreview.src; 
-                statusMessage.textContent = 'กำลังวิเคราะห์ภาพ...';
-            } else {
-                statusMessage.textContent = 'ยังไม่ได้เลือกรูปภาพหรือเปิดกล้อง';
-                statusMessage.style.color = '#ffc107';
-                return;
-            }
-
-            predictionContainer.innerHTML = ''; 
-            if (sourceForDisplay) {
-                const imgElement = document.createElement('img');
-                imgElement.src = sourceForDisplay;
-                imgElement.alt = 'ภาพที่วิเคราะห์';
-                imgElement.classList.add('result-image');
-                predictionContainer.appendChild(imgElement);
-            }
-
-            const prediction = await model.predict(imageSource);
-
-            // ค้นหาการทำนายที่มีความน่าจะเป็นสูงสุด
-            let predictedClass = 'unrecognized';
-            let highestProbability = 0;
-
-            for (let i = 0; i < maxPredictions; i++) {
-                const classPrediction = prediction[i];
-                const probability = classPrediction.probability;
-
-                // ปรับชื่อคลาสให้ตรงกับคีย์ใน wasteDisposalInfo
-                const classNameKey = classPrediction.className.toLowerCase().replace(/\s/g, '');
-
-                if (probability > highestProbability) {
-                    highestProbability = probability;
-                    if (wasteDisposalInfo[classNameKey]) {
-                        predictedClass = classNameKey;
-                    } else {
-                        predictedClass = 'unrecognized';
-                    }
-                }
-            }
-
-            
-            if (highestProbability < 0.70) { // หากความน่าจะเป็นน้อยกว่า 70%
-                predictionContainer.innerHTML += `
-                    <p>ไม่ทราบประเภท ขออภัยครับ 😿</p>
-                    <p>กรุณาลองใหม่ด้วยรูปภาพที่ชัดเจนขึ้น หรืออยู่ในสภาพแวดล้อมที่ดีขึ้น</p>
-                `;
-                statusMessage.textContent = 'ไม่สามารถระบุประเภทได้';
-                statusMessage.style.color = '#ffc107'; // สีเหลืองเตือน
-            } else {
-                // แสดงผลลัพธ์
-                const info = wasteDisposalInfo[predictedClass] || wasteDisposalInfo['unrecognized'];
-                predictionContainer.innerHTML += `
-                    <p><strong>ประเภทที่ทำนายได้:</strong> ${info.bin} (${predictedClass})</p>
-                    <p><strong>วิธีทิ้ง:</strong> ${info.instruction}</p>
-                `;
-
-                statusMessage.textContent = 'วิเคราะห์เสร็จสมบูรณ์';
-                statusMessage.style.color = '#28a745';
-            }
-        }
-
-        // วนลูปสำหรับการทำนายต่อเนื่องจากกล้อง
-        async function loop() {
-            if (isCameraActive && cameraFeed.srcObject) { // ตรวจสอบแค่ srcObject ก็พอ
-                await predict(); // ทำนายจากกล้อง
-                window.requestAnimationFrame(loop); // วนลูปต่อไป
-            }
-        }
-
-        
-        imageUpload.addEventListener('change', function(event) {
-            stopCamera(); // หยุดกล้องถ้ามีการเลือกไฟล์
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    imagePreview.src = e.target.result;
-                    predictionContainer.innerHTML = '<p>รูปภาพถูกโหลดแล้ว คลิก "จำแนกประเภท" เพื่อวิเคราะห์</p>';
-                    statusMessage.textContent = '';
-                    if (model) {
-                        classifyButton.disabled = false;
-                    }
-                };
-                reader.readAsDataURL(file);
-            } else {
-                imagePreview.src = '#';
-                // predictionContainer.innerHTML = '<p>กรุณาอัปโหลดรูปภาพ หรือใช้กล้องเพื่อจำแนกประเภทขยะของคุณ</p>';
-                classifyButton.disabled = true;
-            }
-        });
-
-        // Event listener สำหรับปุ่มจำแนกประเภท
-        classifyButton.addEventListener('click', predict);
-
-        // Event listener สำหรับปุ่มใช้กล้อง
-        useCameraButton.addEventListener('click', startCamera);
-
-        // เริ่มต้นโหลดโมเดลเมื่อหน้าโหลดเสร็จ
-        init();
-    </script>
-
-</body>
-</html>
+    }
+</script>
